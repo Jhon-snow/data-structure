@@ -1,0 +1,110 @@
+package com.company;
+import java.util.*;
+public class lazy_p {
+
+    int[]stree;
+    int[]lazy;
+    lazy_p(int arr[], int n)
+    {
+
+        int x = (int) (Math.ceil(Math.log(n) / Math.log(2)));
+        int max_size = 2 * (int) Math.pow(2, x) - 1;
+
+
+        stree=new int[max_size];
+        lazy=new int[max_size];
+        //Arrays.fill(stree, Integer.MAX_VALUE);
+        constructtree(arr,stree,0,arr.length-1,0);
+
+    }
+
+
+    void constructtree(int arr[],int stree[],int low, int high,int pos){
+        if(low==high){
+            stree[pos]=arr[low];
+            return;
+        }
+        int mid=(low+(high-low)/2);
+        constructtree(arr,stree,low,mid,(2*pos)+1);
+        constructtree(arr,stree,mid+1,high,(2*pos)+2);
+        stree[pos]=(stree[(2*pos)+1]+stree[(2*pos)+2]);
+    }
+
+    //update a given range using lazy propogation
+////////////////////////////////////////////////////////////////////////////////////////////
+
+    void updaterange(int l,int r,int size,int delta,int arr[]){
+        for(int i=l;i<=r;i++)
+            arr[i]+=delta;
+        //int []lazy=new int[size];
+        updaterange(l,r,0,size-1,0,delta,lazy);
+
+    }
+
+    void updaterange(int l,int r,int low,int high,int pos,int delta,int lazy[])
+    {
+        // to check for pending update on the given range first clear pending update then do current update by proceeding other condition
+        if(lazy[pos]!=0)
+        {
+            stree[pos] += (high - low + 1) * lazy[pos];
+            if(low!=high){
+                lazy[2*pos+1]+=lazy[pos];
+                lazy[2*pos+2]+=lazy[pos];
+            }
+            lazy[pos]=0;
+        }
+        if(high<l||low>r)
+            return;
+        if(l<=low && high<=r) {
+            stree[pos] += (high - low + 1) * delta;
+            if (low != high) {
+                lazy[2 * pos + 1] += delta;
+                lazy[2 * pos + 2] += delta;
+            }
+            return;
+        }
+
+        int mid = (low + (high - low) / 2);
+        updaterange(l,r,low,mid,2*pos+1,delta,lazy);
+        updaterange(l,r,mid+1,high,2*pos+2,delta,lazy);
+        stree[pos]=(stree[2 * pos + 1]+stree[2 * pos + 2]);
+    }
+
+    int rangequery(int l,int r,int n){
+        int sum= rangequery(l,r,0,n-1,0);
+        return sum;
+    }
+    int rangequery(int l,int r,int low ,int high,int pos){
+//if previous update is there on the given range then clear that update and then return updated value on that range
+        if(lazy[pos]!=0)
+        {
+            stree[pos] += (high - low + 1) * lazy[pos];
+            if(low!=high){
+                lazy[2*pos+1]+=lazy[pos];
+                lazy[2*pos+2]+=lazy[pos];
+            }
+            lazy[pos]=0;
+        }
+        if(high<l||low>r)
+            return 0;
+        if(l<=low && high<=r)
+            return stree[pos];
+
+        int mid = (low + (high - low) / 2);
+        int sum= rangequery(l,r,low,mid,2*pos+1)+rangequery(l,r,mid+1,high,2*pos+2);
+        return sum;
+    }
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+public static void main(String[]args) {
+    int[] arr = new int[]{1, 2, 4, 0};
+    lazy_p s=new lazy_p(arr,4);
+    System.out.println(Arrays.toString(s.stree));
+
+    System.out.println(Arrays.toString(arr));
+    s.updaterange(1,3,4,10,arr);
+    System.out.println(Arrays.toString(s.stree));
+    System.out.println(Arrays.toString(arr));
+    System.out.println(Arrays.toString(s.lazy));
+}
+
+}
