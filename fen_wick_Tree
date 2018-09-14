@@ -1,0 +1,71 @@
+package com.company;
+import java.util.*;
+public class BIT {
+    private int[] bit;
+    private final int SIZE;
+    BIT(int arr[]) {
+        bit = new int[arr.length];
+        SIZE=bit.length;
+        build(arr);
+    }
+    private void build(int arr[]) {
+  for(int i=1;i<arr.length;i++){
+      update(arr[i],i);
+  }
+    }
+
+    public int getResult(int l, int r) {
+       //return rightsum()-leftsum();
+        int sum=(getsum(r)-getsum(l-1));
+        return sum;
+    }
+    public int getResult(int index){
+        return getsum(index);
+    }
+
+    private int getsum(int index){
+        int sum=0;
+        while (index>0){
+            sum+=bit[index];
+            index-=(index&(-index));
+        }
+        return sum;
+    }
+    public void update(int delta, int index) {
+
+        while( index<SIZE){
+            bit[index]+=delta;
+            index+=(index & (-index));
+        }
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(bit) ;
+    }
+    public static void main(String[] args){
+        int arr[]=new int[]{0,5,9,6,3,2,15,10,14};
+        BIT bit=new BIT(arr);
+        System.out.println(Arrays.toString(arr));
+        for(int i=1;i<=8;i++)
+            System.out.print(bit.getResult(i)+" ");
+        System.out.println();
+        System.out.println(bit);
+        System.out.println(bit.getResult(5,7));
+        bit.update(15,5);
+        System.out.println(bit);
+        System.out.println(bit.getResult(5,7));
+    }
+}
+
+
+//        build(int arr[]);
+//    public void build(bit[arr.length-1])
+
+
+//    public static void main(String[]args){
+//        Scanner scan=new Scanner(System.in);
+
+
+
+
