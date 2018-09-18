@@ -121,6 +121,10 @@ public int changekey(int i,int key){
 
 public void buildheap(int arr[]){
             this.array=arr;
+        int i=array.length/2;
+        while(i-->=0){
+                maxheapify(i);
+        }
 
 }
 public int delete(int i){
