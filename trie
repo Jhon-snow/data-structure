@@ -1,0 +1,60 @@
+package com.company;
+import java.util.*;
+public class trie {
+  private class Gtrie {
+       private HashMap<Character, Gtrie> children;
+       boolean isleaf;
+
+       public Gtrie() {
+           children = new HashMap<Character, Gtrie > ();
+           isleaf=false;
+       }
+
+   }
+   private Gtrie root;
+   trie(){
+  root=new Gtrie();
+   }
+   public void createtrie(String s){
+Gtrie temp=root;
+for (int i=0;i<s.length();i++)
+{
+    char ch=s.charAt(i);
+    Gtrie node=temp.children.get(ch);
+   if(node==null){
+       node=new Gtrie();
+       temp.children.put(ch, node);
+   }
+      temp = node;
+          }
+    temp.isleaf=true;      //when string ends set boolean value to true
+
+    }
+
+public void findstring (String s){
+    Gtrie temp=root;
+    for(char ch:s.toCharArray()){
+        if(temp.children.get(ch)==null)
+        { System.out.println("No string doesnot exist");
+        return;                                             //if string is larger than all string in trie
+        }
+
+        temp = temp.children.get(ch);
+    }
+
+    if(temp.isleaf==true)
+        System.out.println("yes string exist");
+    else
+        System.out.println("No string doesnot exist");
+}
+public static void main(String[]args){
+//       Scanner scan=new Scanner(System.in);
+    trie t=new trie();
+    t.createtrie("abc");
+   t.createtrie("abcde");
+   t.createtrie("abcgf");
+      t.findstring("abc");
+   t.findstring("abcd");
+    t.findstring("abcdefg");
+}
+}
