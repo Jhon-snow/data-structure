@@ -6,10 +6,10 @@ public class Segment_tree {
     {
       //  int size=(int)(Math.ceil(Math.log(n)/Math.log(2)));
 
-        int x = (int) (Math.ceil(Math.log(n) / Math.log(2)));
+        int x = (int) (Math.ceil(Math.log(n) / Math.log(2)));//if n==5 then log 2^5 is 3 and 2^3 is 8
 
         //Maximum size of segment tree
-        int max_size = 2 * (int) Math.pow(2, x) - 1;
+        int max_size = 2 * (int) Math.pow(2, x) - 1;//so max size is 2*8-1=15
 
 
         stree=new int[max_size];
