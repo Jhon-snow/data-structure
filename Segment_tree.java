@@ -35,7 +35,7 @@ public class Segment_tree {
        int query(int l,int r,int low,int high,int pos){
         if(r<low||l>high)
             return Integer.MAX_VALUE;
-        if(l>=low && high<=r)
+        if(l<=low && high<=r)
             return stree[pos];
         int mid=(low+(high-low)/2);
         return (Math.min(query(l,r,low,mid,2*pos+1),query(l,r,mid+1,high,2*pos+2)));
