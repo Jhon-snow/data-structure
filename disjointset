@@ -44,7 +44,8 @@ public class DisjointSet{
     }
 
    public int findSize(int data){
-          return (map.get(findSet(data)).size);
+           return(map.get(findSet(data)).size);
+           }
    
     public int findSet(int data) {
        return findSet(map.get(data)).data;
