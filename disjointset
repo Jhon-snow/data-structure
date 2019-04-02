@@ -8,6 +8,7 @@ public class DisjointSet{
         class Node{
         int data;
         int rank;
+        int size;
         Node parent;
         }
         
@@ -15,6 +16,7 @@ public class DisjointSet{
         Node node =new Node();
         node.data=data;
         node.rank=0;
+        node.size=1;
         node.parent=node;
         map.put(data,node);
         
@@ -32,13 +34,18 @@ public class DisjointSet{
         if(parent1.rank>=parent2.rank){
             parent1.rank=(parent1.rank==parent2.rank)?parent1.rank+1:parent1.rank;
             parent2.parent=parent1;
+            parent1.size+=parent2.size;
         }
-        else
+        else{
             parent1.parent=parent2;
-        
+                parent2.size+=parent1.size;
+                }
         return true;
     }
 
+   public int findSize(int data){
+          return (map.get(findSet(data)).size);
+   
     public int findSet(int data) {
        return findSet(map.get(data)).data;
             }
